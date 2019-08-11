@@ -1,11 +1,11 @@
 import React,{Component} from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import PubSub from 'pubsub-js'
 
 export  default class Main extends Component{
-
-
+    static propTypes = {
+        searchName:PropTypes.string.isRequired
+    };
     state = {
         //第一次进入未搜索
         initView:true,
@@ -16,35 +16,26 @@ export  default class Main extends Component{
         //错误信息
         errorMsg:null
     };
-    componentDidMount() {
-        //初次加载时触发
-        //订阅消息
-        PubSub.subscribe('search',(msg,searcgName) =>{
-            //制定了新的name需要请求
-            this.setState({initView:false,loading:true})
-            //发送ajax请求
-            const url = `https://api.github.com/search/users?q=${searcgName}`;
-            axios.get(url).then(response =>{
-                //得到相响应数据
-                const result = response.data;
-                const users = result.items.map(item =>{
-                    return {name:item.login,url:item.html_url,avatarUrl:item.avatar_url}
-                });
-                //更新状态成功
-                this.setState({loading:false,users})
-            }).catch(error =>{
-                this.setState({loading:false,errorMsg:error})
-            })
-        })
-    }
-/*
     //当组件接收到新的属性时回调
     componentWillReceiveProps(newProps) {
         const {searchName} = newProps;
         console.log(searchName);
         //更新状态
-
-    }*/
+        this.setState({initView:false,loading:true})
+        //发送ajax请求
+        const url = `https://api.github.com/search/users?q=${searchName}`;
+        axios.get(url).then(response =>{
+            //得到相响应数据
+            const result = response.data;
+            const users = result.items.map(item =>{
+                return {name:item.login,url:item.html_url,avatarUrl:item.avatar_url}
+            })
+            //更新状态成功
+            this.setState({loading:false,users})
+        }).catch(error =>{
+            this.setState({loading:false,errorMsg:error})
+        })
+    }
 
     render() {
 

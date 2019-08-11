@@ -1,17 +1,14 @@
 import React,{Component} from 'react'
 import PropTypes from 'prop-types'
-import PubSub from 'pubsub-js'
-
-
 export  default class Search extends Component{
-
+    static propTypes = {
+        setsearchName:PropTypes.func.isRequired
+    };
     headleClick = ()=>{
         //得到输入的关键字
         const searchName = this.input.value.trim();
         if (searchName){
-            //搜索
-            //发布消息
-            PubSub.publish('search',searchName);
+            this.props.setsearchName(searchName);
         }
         //搜索
     };
