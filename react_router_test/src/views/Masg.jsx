@@ -23,9 +23,26 @@ export  default class Masg extends Component{
             this.setState({messages})
         },1000)
     }
-
+    /*push,replace
+    *
+    * */
+    showDetail = (id)=>{
+        this.props.history.push(`/home/masg/messagedetail/${id}`)
+    };
+    showDetail2 = (id)=>{
+        this.props.history.replace(`/home/masg/messagedetail/${id}`)
+    };
+    back =()=>{
+        this.props.history.goBack();
+    };
+    forword=()=>{
+        this.props.history.goForward();
+    };
+    reqPage=()=>{
+        //通过js进行页面跳转
+       window.location = 'https://baidu.com';
+    } ;
     render() {
-
         return (
             <div>
                 <ul>
@@ -33,10 +50,20 @@ export  default class Masg extends Component{
                         this.state.messages.map((mes,index)=>(
                             <li key={index}>
                                 <MyNavLink to={`/home/masg/messagedetail/${mes.id}`}>{mes.title}</MyNavLink>
+                                {/*传递id*/}
+                                &nbsp;&nbsp;<button onClick={()=>this.showDetail(mes.id)}>push()查看</button>
+                                &nbsp;&nbsp;<button onClick={()=>this.showDetail2(mes.id)}>replace()查看</button>
                             </li>
                         ))
                     }
                 </ul>
+                <p>
+                    <button onClick={this.back}>回退</button>
+                    <button onClick={this.forword}>前进</button>
+                </p>
+                <p>
+                    <button onClick={this.reqPage}>页面跳转</button>
+                </p>
                 <div>
                     <Switch>
                         <Route  path='/home/masg/messagedetail/:id' component={message_detail}/>
